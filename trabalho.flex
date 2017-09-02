@@ -33,39 +33,53 @@ public static int PARCELAS = 262;
     if (argv.length == 0) {
       try {
           scanner = new TrabalhoI( System.in );
-	  int line;
+	        int line;
           while ( !scanner.zzAtEOF ){
-		line = scanner.yyline+1;
+		      line = scanner.yyline+1;
 	        System.out.println("Line: "+line+" token: "+scanner.yylex()+"\t<"+scanner.yytext()+">");
-	  }
+	    }
         }
         catch (Exception e) {
-          System.out.println("Unexpected exception:");
-          e.printStackTrace();
+            System.out.println("Unexpected exception:");
+            e.printStackTrace();
         }
+    } else {
+      java.util.Scanner console = new java.util.Scanner ( System.in );
+      System.out.println("Informe a data de hoje: ");
+      String dataHoje = console.nextLine();
 
-    }
-    else {
+      System.out.println("Informe seu nome: ");
+      String nome = console.nextLine();
+
+      System.out.println("Informe o valor do empréstimo: ");
+      String valorEmprestimo = console.nextLine();
+
+      System.out.println("Informe número de parcelas: ");
+      String nParcelas = console.nextLine();
+
+      System.out.println("Informe a taxa de juros: ");
+      String taxaJuros = console.nextLine();
+
       for (int i = 0; i < argv.length; i++) {
         scanner = null;
         try {
           scanner = new TrabalhoI( new java.io.FileReader(argv[i]) );
-	  int line;
+	        int line;
           while ( !scanner.zzAtEOF ){
-		line = scanner.yyline+1;
-                System.out.println("Line: "+line+" token: "+scanner.yylex()+"\t<"+scanner.yytext()+">");
-	  }
+		      line = scanner.yyline+1;
+          System.out.println("Line: "+line+" token: "+scanner.yylex()+"\t<"+scanner.yytext()+">");
+	    }
         }
-        catch (java.io.FileNotFoundException e) {
-          System.out.println("File not found : \""+argv[i]+"\"");
-        }
-        catch (java.io.IOException e) {
-          System.out.println("IO error scanning file \""+argv[i]+"\"");
-          System.out.println(e);
-        }
-        catch (Exception e) {
-          System.out.println("Unexpected exception:");
-          e.printStackTrace();
+          catch (java.io.FileNotFoundException e) {
+            System.out.println("File not found : \""+argv[i]+"\"");
+          }
+          catch (java.io.IOException e) {
+            System.out.println("IO error scanning file \""+argv[i]+"\"");
+            System.out.println(e);
+          }
+          catch (Exception e) {
+            System.out.println("Unexpected exception:");
+            e.printStackTrace();
         }
       }
     }

@@ -11,12 +11,16 @@
 
 %{
 
-public static int DATA = 257;
-public static int NOME = 258;
-public static int VALOR = 259;
-public static int NUMERO = 260;
-public static int JUROS = 261;
-public static int PARCELAS = 262;
+public final static int DATA = 257;
+public final static int NOME = 258;
+public final static int VALOR = 259;
+public final static int NUMERO = 260;
+public final static int JUROS = 261;
+public final static int PARCELAS = 262;
+public final static int RESTO = 263;
+public final static int NOVALINHA = 263;
+
+
 
 
 /**
@@ -45,43 +49,91 @@ public static int PARCELAS = 262;
         }
     } else {
       java.util.Scanner console = new java.util.Scanner ( System.in );
-      System.out.println("Informe a data de hoje: ");
-      String dataHoje = console.nextLine();
+      // System.out.println("Informe a data de hoje: ");
+      // String dataHoje = console.nextLine();
 
-      System.out.println("Informe seu nome: ");
-      String nome = console.nextLine();
+      String timeStamp = new java.text.SimpleDateFormat("dd/MM/yyyy").format(java.util.Calendar.getInstance().getTime());
 
-      System.out.println("Informe o valor do empréstimo: ");
-      String valorEmprestimo = console.nextLine();
+      try{
 
-      System.out.println("Informe número de parcelas: ");
-      String nParcelas = console.nextLine();
+          System.out.println("Informe seu nome: ");
+          String nome = console.nextLine();
 
-      System.out.println("Informe a taxa de juros: ");
-      String taxaJuros = console.nextLine();
+          System.out.println("Informe o valor do empréstimo: ");
+          double valorEmprestimo = console.nextDouble();
 
-      for (int i = 0; i < argv.length; i++) {
-        scanner = null;
-        try {
-          scanner = new TrabalhoI( new java.io.FileReader(argv[i]) );
-	        int line;
-          while ( !scanner.zzAtEOF ){
-		      line = scanner.yyline+1;
-          System.out.println("Line: "+line+" token: "+scanner.yylex()+"\t<"+scanner.yytext()+">");
-	    }
-        }
+          System.out.println("Informe número de parcelas: ");
+          int nParcelas = console.nextInt();
+
+          System.out.println("Informe a taxa de juros: ");
+          double taxaJuros = console.nextDouble();
+
+          java.io.Writer writer = null;
+
+          scanner = null;
+          writer = null;
+          try {
+              scanner = new TrabalhoI( new java.io.FileReader( argv[0]) );
+    	        int line;
+              writer = new java.io.BufferedWriter(new java.io.OutputStreamWriter(new java.io.FileOutputStream(argv[1]), "utf-8"));
+              // writer.write("Something");
+              while ( !scanner.zzAtEOF ){
+    		          line = scanner.yyline+1;
+                  switch(scanner.yylex()){
+                      case DATA:
+                          writer.write(timeStamp);
+                          break;
+
+                      case NOME:
+                          writer.write(nome);
+                          break;
+
+                      case VALOR:
+                          writer.write(String.valueOf(valorEmprestimo));
+                          break;
+
+                      case NUMERO:
+                          writer.write(String.valueOf(nParcelas));
+                          break;
+
+                      case JUROS:
+                          writer.write(String.valueOf(taxaJuros));
+                          break;
+
+                      case PARCELAS:
+                          for(int j=1; j <= nParcelas; j++){
+                              writer.write(String.valueOf(j) + " - " + String.valueOf((valorEmprestimo/nParcelas)*taxaJuros));
+                              writer.write(" \\par ");
+                          }
+                          break;
+
+                      case NOVALINHA:
+                          writer.write(scanner.yytext());
+                          break;
+
+                      default:
+                          writer.write(scanner.yytext());
+                          break;
+                  }
+                  // System.out.println("Line: "+line+" token: "+scanner.yylex()+"\t<"+scanner.yytext()+">");
+    	        }
+          }
           catch (java.io.FileNotFoundException e) {
-            System.out.println("File not found : \""+argv[i]+"\"");
+              System.out.println("File not found : \""+argv[0]+"\"");
           }
           catch (java.io.IOException e) {
-            System.out.println("IO error scanning file \""+argv[i]+"\"");
-            System.out.println(e);
+              System.out.println("IO error scanning file \""+argv[0]+"\"");
+              System.out.println(e);
           }
           catch (Exception e) {
-            System.out.println("Unexpected exception:");
-            e.printStackTrace();
+              System.out.println("Unexpected exception:");
+              e.printStackTrace();
+          } finally {
+              try {writer.close();} catch (Exception ex) {/*ignore*/}
+          }
+        }catch (java.util.InputMismatchException e){
+            System.out.println("Tipo de valor incorreto.");
         }
-      }
     }
   }
 
@@ -98,6 +150,6 @@ WHITE_SPACE_CHAR=[\n\r\ \t\b\012]
 "#juros#"		{ return JUROS; }
 "#parcelas#"		{ return PARCELAS; }
 
-{WHITE_SPACE_CHAR}+ { }
+{WHITE_SPACE_CHAR}+ { return NOVALINHA; }
 
-. { }
+. { return RESTO; }

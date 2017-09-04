@@ -1,7 +1,4 @@
-# trabalho-I-compiladores
+# Trabalho de Compiladores
 
-## Comandos
-
-- java -jar JFlex.jar trabalho.flex
-- javac -cp . TrabalhoI.java
-- java -cp . TrabalhoI modelo.rtf saida.rtf
+## Alunos
+### Marlon Baptista, Eurico Saldanha, Daniel Lopes

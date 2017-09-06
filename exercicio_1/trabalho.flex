@@ -11,6 +11,14 @@
 
 %{
 
+/**
+  * Alunos:
+  * Marlon Baptista de Quadros
+  * Eurico Saldanha
+  * Daniel Lopes
+  *
+  */
+
 public final static int DATA = 257;
 public final static int NOME = 258;
 public final static int VALOR = 259;
@@ -101,8 +109,10 @@ public final static int NOVALINHA = 263;
                           break;
 
                       case PARCELAS:
+                          String resultado;
                           for(int j=1; j <= nParcelas; j++){
-                              writer.write(String.valueOf(j) + " - " + String.valueOf((valorEmprestimo/nParcelas)*taxaJuros));
+                              resultado = String.format("%.2f", (valorEmprestimo/nParcelas)*taxaJuros);
+                              writer.write(String.valueOf(j) + " - " + resultado);
                               writer.write(" \\par ");
                           }
                           break;

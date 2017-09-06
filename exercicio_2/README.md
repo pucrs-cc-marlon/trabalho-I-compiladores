@@ -6,4 +6,8 @@
 - javac -cp . MeuLexico.java
 - java -cp . MeuLexico Pessoa.java
 
-java -jar JFlex.jar asdr_lex.flex
+OU
+
+- make all
+- java -cp . MeuLexico Pessoa.java
+- java -cp . MeuLexico PessoaSwitch.java
